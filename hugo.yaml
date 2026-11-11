@@ -1,0 +1,81 @@
+baseURL: https://example.org/
+languageCode: en-AU
+defaultContentLanguage: en
+title: ABACBS
+theme: mana
+
+outputs:
+  home:
+    - HTML
+    - JSON
+  # No RSS: feeds would publish the editor notes (HTML comments) in content files.
+  section:
+    - HTML
+  taxonomy:
+    - HTML
+  term:
+    - HTML
+
+pagination:
+  pageSize: 10
+
+# Also strips the editor notes (HTML comments) in content files from the published pages.
+minify:
+  minifyOutput: true
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+    parser:
+      attribute:
+        block: true
+        title: true
+  highlight:
+    codeFences: true
+    guessSyntax: true
+    noClasses: false
+    style: catppuccin-macchiato
+
+params:
+  enableIntegrity: false
+  relatedPostsCount: 3
+  description: Australian Bioinformatics and Computational Biology Society
+  author: ABACBS
+  currentConferenceYear: "2025"
+  heroHeadline: AUSTRALIAN BIOINFORMATICS AND COMPUTATIONAL BIOLOGY SOCIETY
+  heroBannerAsset: hero-dna-repaired.png
+  footerText: Australian Bioinformatics and Computational Biology Society
+  buyMeACoffee:
+    enabled: false
+
+menus:
+  main:
+    - name: Home
+      pageRef: /
+      weight: 10
+
+    - name: About
+      identifier: about
+      weight: 20
+
+    - name: Attend
+      identifier: registrations
+      weight: 30
+
+    - name: Events
+      identifier: events
+      weight: 40
+
+    - name: FAQs
+      identifier: faqs
+      weight: 50
+
+    - name: Gallery
+      pageRef: /gallery
+      identifier: gallery
+      weight: 60
+
+    - name: Archive
+      identifier: archive
+      weight: 70

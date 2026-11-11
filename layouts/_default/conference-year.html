@@ -1,0 +1,96 @@
+{{ define "main" }}
+  {{ $page := . }}
+
+  {{ $program := $page.GetPage "program" }}
+  {{ $speakers := $page.GetPage "speakers" }}
+  {{ $importantDates := $page.GetPage "important-dates" }}
+  {{ $committee := $page.GetPage "committee" }}
+  {{ $sponsors := $page.GetPage "sponsors" }}
+  {{ $awards := $page.GetPage "awards" }}
+  {{ $codeOfConduct := $page.GetPage "code-of-conduct" }}
+  {{ $registration := $page.GetPage "registration" }}
+  {{ $abstracts := $page.GetPage "abstracts" }}
+  {{ $posters := $page.GetPage "posters" }}
+  {{ $dinner := $page.GetPage "conference-dinner" }}
+  {{ $parents := $page.GetPage "parents-carer" }}
+  {{ $associatedEvents := $page.GetPage "associated-events" }}
+  {{ $workshops := $page.GetPage "workshops" }}
+  {{ $faqs := $page.GetPage "faqs" }}
+  {{ $gallery := site.GetPage "/gallery" }}
+
+  <section class="conference-year-section">
+    <header class="conference-year-header">
+      <div class="conference-year-container">
+        {{ with .Params.bannerLocation | default .Params.location }}<p class="conference-year-location">{{ . }}</p>{{ end }}
+        <h1 class="conference-year-title">{{ .Title }}</h1>
+        <p class="conference-year-meta">
+          {{ with .Params.dates }}<span>{{ . }}</span>{{ end }}
+          {{ if and .Params.dates .Params.location }}<span class="conference-sep">·</span>{{ end }}
+          {{ with .Params.location }}<span>{{ . }}</span>{{ end }}
+        </p>
+      </div>
+    </header>
+    <div class="conference-year-container">
+
+      <nav class="conference-nav-groups" aria-label="Conference pages">
+        {{ if or $program $speakers $importantDates $committee $sponsors $awards }}
+          <div class="conference-nav-group">
+            <span class="conference-nav-label">About</span>
+            <div class="conference-quick-links">
+              {{ with $program }}<a href="{{ .RelPermalink }}">Program</a>{{ end }}
+              {{ with $speakers }}<a href="{{ .RelPermalink }}">Speakers</a>{{ end }}
+              {{ with $importantDates }}<a href="{{ .RelPermalink }}">Important dates</a>{{ end }}
+              {{ with $committee }}<a href="{{ .RelPermalink }}">Committee</a>{{ end }}
+              {{ with $sponsors }}<a href="{{ .RelPermalink }}">Sponsors</a>{{ end }}
+              {{ with $awards }}<a href="{{ .RelPermalink }}">Awards</a>{{ end }}
+            </div>
+          </div>
+        {{ end }}
+        {{ if or $registration $abstracts $posters $dinner $parents $codeOfConduct }}
+          <div class="conference-nav-group">
+            <span class="conference-nav-label">Attend</span>
+            <div class="conference-quick-links">
+              {{ with $registration }}<a href="{{ .RelPermalink }}">Registration</a>{{ end }}
+              {{ with $abstracts }}<a href="{{ .RelPermalink }}">Abstracts</a>{{ end }}
+              {{ with $posters }}<a href="{{ .RelPermalink }}">Posters</a>{{ end }}
+              {{ with $dinner }}<a href="{{ .RelPermalink }}">Conference dinner</a>{{ end }}
+              {{ with $parents }}<a href="{{ .RelPermalink }}">Parents &amp; carers</a>{{ end }}
+              {{ with $codeOfConduct }}<a href="{{ .RelPermalink }}">Code of conduct</a>{{ end }}
+            </div>
+          </div>
+        {{ end }}
+        {{ if or $associatedEvents $workshops }}
+          <div class="conference-nav-group">
+            <span class="conference-nav-label">Events</span>
+            <div class="conference-quick-links">
+              {{ with $associatedEvents }}<a href="{{ .RelPermalink }}">Linked events</a>{{ end }}
+              {{ with $workshops }}<a href="{{ .RelPermalink }}">Workshops</a>{{ end }}
+            </div>
+          </div>
+        {{ end }}
+        {{ if or $faqs $gallery }}
+          <div class="conference-nav-group">
+            <span class="conference-nav-label">More</span>
+            <div class="conference-quick-links">
+              {{ with $faqs }}<a href="{{ .RelPermalink }}">FAQs</a>{{ end }}
+              {{ with $gallery }}<a href="{{ .RelPermalink }}">Gallery</a>{{ end }}
+            </div>
+          </div>
+        {{ end }}
+      </nav>
+
+      <div class="conference-synopsis-text">
+        <h2>Conference overview</h2>
+        <p>{{ .Params.synopsis | default .Content | plainify }}</p>
+        {{ if and .Params.synopsis (trim .Plain " \n\r\t") }}
+          <div class="conference-synopsis-details single-page-content">
+            {{ .Content }}
+          </div>
+        {{ end }}
+        {{ with .Params.overviewVideo }}
+          <iframe class="conference-overview-video" title="{{ $page.Title }} video" src="https://www.youtube-nocookie.com/embed/{{ . }}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        {{ end }}
+      </div>
+    </div>
+  </section>
+{{ end }}

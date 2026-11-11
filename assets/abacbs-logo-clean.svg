@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1254 1254" role="img" aria-label="ABACBS logo">
+  <g fill="none" stroke="#000" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 536 525 L 729 716"/>
+    <path d="M 900 595 L 900 645"/>
+    <path d="M 610 905 L 640 905"/>
+  </g>
+  <g stroke="#000" stroke-width="18">
+    <circle cx="340" cy="335" r="260" fill="#000"/>
+    <circle cx="900" cy="335" r="260" fill="#ff1020"/>
+    <circle cx="340" cy="905" r="260" fill="#079fea"/>
+    <circle cx="900" cy="905" r="260" fill="#fff"/>
+  </g>
+</svg>

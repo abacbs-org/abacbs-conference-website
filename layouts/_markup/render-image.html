@@ -1,0 +1,7 @@
+{{- /* Makes Markdown images written as /archive/... follow baseURL, so they also work when the site is served from a subfolder. */ -}}
+{{- $src := .Destination -}}
+{{- if and (hasPrefix $src "/") (not (hasPrefix $src "//")) -}}
+  {{- $src = strings.TrimPrefix "/" $src | relURL -}}
+{{- end -}}
+<img src="{{ $src | safeURL }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }}>
+{{- /* chomp trailing newline */ -}}

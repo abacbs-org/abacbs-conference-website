@@ -1,0 +1,21 @@
+{{ define "main" }}
+  <div class="single-page-wrapper">
+    <article class="single-page-article">
+      {{ partial "conference-breadcrumbs.html" . }}
+
+      <h1 class="single-page-title">{{ .Title }}</h1>
+
+      {{ with .Description }}
+        <p class="single-page-description">{{ . }}</p>
+      {{ end }}
+
+      <div class="single-page-body">
+        <div class="single-page-content">
+          {{ .Content }}
+        </div>
+
+        {{ partial "toc.html" . }}
+      </div>
+    </article>
+  </div>
+{{ end }}

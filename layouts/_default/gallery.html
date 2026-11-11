@@ -1,0 +1,79 @@
+{{ define "main" }}
+  <section class="conference-gallery-section">
+    <div class="conference-gallery-container">
+      <header class="conference-gallery-header">
+        {{ partial "conference-breadcrumbs.html" . }}
+        <h1>{{ .Title }}</h1>
+        {{ with and (trim .Plain " \n\r\t") .Content }}<div class="conference-gallery-intro">{{ . }}</div>{{ end }}
+      </header>
+
+      {{/* Newest first. Filenames like abacbs-2019-02.jpg get a "2019" caption. */}}
+      {{ $images := sort (.Resources.ByType "image") "Name" "desc" }}
+      {{ if gt (len $images) 0 }}
+        <div class="conference-gallery-grid">
+          {{ range $images }}
+            {{ $img := .Filter images.AutoOrient }}
+            {{ $thumb := $img.Resize "720x webp q80" }}
+            {{ $full := $img }}
+            {{ if gt $img.Width 1800 }}{{ $full = $img.Resize "1800x webp q85" }}{{ end }}
+            {{ $year := index (findRE `20[0-9]{2}` .Name 1) 0 | default "" }}
+            {{ $alt := cond (ne $year "") (printf "ABACBS %s conference photo" $year) "ABACBS conference photo" }}
+            <figure class="conference-gallery-item">
+              <a href="{{ $full.RelPermalink }}" class="conference-gallery-link" data-gallery-full>
+                <img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+              </a>
+              {{ with $year }}<figcaption>ABACBS {{ . }}</figcaption>{{ end }}
+            </figure>
+          {{ end }}
+        </div>
+
+        <dialog class="conference-gallery-lightbox" aria-label="Photo viewer">
+          <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+          <button type="button" class="lightbox-prev" aria-label="Previous photo">&#8249;</button>
+          <img alt="">
+          <button type="button" class="lightbox-next" aria-label="Next photo">&#8250;</button>
+        </dialog>
+        <script>
+          (() => {
+            const links = [...document.querySelectorAll("[data-gallery-full]")];
+            const box = document.querySelector(".conference-gallery-lightbox");
+            if (!box || !box.showModal) return;
+            const img = box.querySelector("img");
+            let i = 0;
+            const show = (n) => {
+              i = (n + links.length) % links.length;
+              img.src = links[i].href;
+              img.alt = links[i].querySelector("img").alt;
+            };
+            links.forEach((a, n) => a.addEventListener("click", (e) => {
+              e.preventDefault();
+              show(n);
+              box.showModal();
+            }));
+            box.querySelector(".lightbox-close").onclick = () => box.close();
+            box.querySelector(".lightbox-prev").onclick = () => show(i - 1);
+            box.querySelector(".lightbox-next").onclick = () => show(i + 1);
+            box.addEventListener("click", (e) => { if (e.target === box) box.close(); });
+            box.addEventListener("keydown", (e) => {
+              if (e.key === "ArrowLeft") show(i - 1);
+              if (e.key === "ArrowRight") show(i + 1);
+            });
+          })();
+        </script>
+      {{ else }}
+        <div class="conference-gallery-empty">
+          <p>No gallery photos yet.</p>
+          <p>Add image files to <strong>content/{{ .File.Path | path.Dir }}/</strong> to populate this page.</p>
+        </div>
+      {{ end }}
+
+      {{ with .Params.photoRequestEmail }}
+        <div class="conference-gallery-request">
+          <h2>Looking for more photos?</h2>
+          <p>We have more photos from ABACBS conferences than we can show here. If you'd like access to the full collection, get in touch with the conference committee.</p>
+          <a class="conference-gallery-request-button" href="mailto:{{ . }}?subject=ABACBS%20conference%20photo%20access%20request">Request access to more photos</a>
+        </div>
+      {{ end }}
+    </div>
+  </section>
+{{ end }}

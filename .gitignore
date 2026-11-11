@@ -1,0 +1,9 @@
+public/*
+.vscode/settings.json
+resources/_gen/*
+.hugo_build.lock
+*.bak
+
+# Full-size photo originals; content/gallery/ holds the resized copies that get published.
+assets/ABACBS photos/
+assets/ABACBS photos.zip

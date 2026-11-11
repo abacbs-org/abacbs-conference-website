@@ -1,0 +1,14 @@
+<nav class="conference-breadcrumbs{{ if .IsHome }} conference-breadcrumbs--path{{ end }}" aria-label="Breadcrumb">
+  <ol>
+    <li>{{ if .IsHome }}<span aria-hidden="true">~/</span>{{ end }}<a href="https://www.abacbs.org/">Main</a></li>
+    <li><span aria-hidden="true">{{ if .IsHome }}/{{ else }}›{{ end }}</span><a href="{{ site.Home.RelPermalink }}"{{ if .IsHome }} aria-current="page"{{ end }}>Conference</a></li>
+    {{ if not .IsHome }}
+      {{ range .Ancestors.Reverse }}
+        {{ if not .IsHome }}
+          <li><span aria-hidden="true">›</span><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+        {{ end }}
+      {{ end }}
+      <li><span aria-hidden="true">›</span><span aria-current="page">{{ .LinkTitle }}</span></li>
+    {{ end }}
+  </ol>
+</nav>

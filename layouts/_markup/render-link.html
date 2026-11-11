@@ -1,0 +1,7 @@
+{{- /* Makes Markdown links written as /archive/... follow baseURL, so they also work when the site is served from a subfolder. */ -}}
+{{- $href := .Destination -}}
+{{- if and (hasPrefix $href "/") (not (hasPrefix $href "//")) -}}
+  {{- $href = strings.TrimPrefix "/" $href | relURL -}}
+{{- end -}}
+<a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text }}</a>
+{{- /* chomp trailing newline */ -}}

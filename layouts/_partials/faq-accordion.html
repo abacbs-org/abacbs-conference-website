@@ -1,0 +1,25 @@
+{{/*
+  Renders an expandable click-to-open FAQ list. Uses native HTML
+  <details>/<summary> elements rather than custom JavaScript — works
+  without any scripting, is keyboard/screen-reader accessible by default,
+  and needs no maintenance as Hugo/theme update.
+
+  Call with: {{ partial "faq-accordion.html" .Params.faqs }}
+*/}}
+{{ if . }}
+  <div class="abacbs-faq-list">
+    {{ range . }}
+      <details class="abacbs-faq-item">
+        <summary class="abacbs-faq-question">
+          <span>{{ .question }}</span>
+          <span class="abacbs-faq-icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="abacbs-faq-answer">
+          {{ .answer | markdownify }}
+        </div>
+      </details>
+    {{ end }}
+  </div>
+{{ else }}
+  <p class="abacbs-empty-note"><em>No FAQs have been added yet.</em></p>
+{{ end }}

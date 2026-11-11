@@ -1,0 +1,26 @@
+{{ define "main" }}
+  <section class="abacbs-structured-section">
+    <div class="abacbs-structured-container">
+      {{ partial "conference-breadcrumbs.html" . }}
+      {{ if .Params.organisingPeople }}
+        <section class="committee-section" aria-labelledby="organising-committee-title">
+          <h1 class="single-page-title" id="organising-committee-title">Organising Committee</h1>
+          {{ partial "people-card-grid.html" (dict "page" . "people" .Params.organisingPeople) }}
+        </section>
+        <section class="committee-section" aria-labelledby="program-committee-title">
+          <h2 class="single-page-title" id="program-committee-title">Programme Committee</h2>
+          {{ partial "people-card-grid.html" (dict "page" . "people" .Params.people) }}
+        </section>
+      {{ else }}
+        <h1 class="single-page-title">{{ .Title | emojify }}</h1>
+        {{ partial "people-card-grid.html" (dict "page" . "people" .Params.people) }}
+      {{ end }}
+      {{/* .Plain ignores editor-note comments, so a comment-only body draws no empty panel */}}
+      {{ with and (trim .Plain " \n\r\t") .Content }}
+        <div class="single-page-content abacbs-structured-intro">
+          {{ . | emojify }}
+        </div>
+      {{ end }}
+    </div>
+  </section>
+{{ end }}

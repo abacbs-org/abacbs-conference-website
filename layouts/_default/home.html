@@ -1,0 +1,26 @@
+{{ define "main" }}
+  {{ $hero := resources.Get (site.Params.heroBannerAsset | default "iStock_000012491718Medium.png") }}
+
+  <section class="abacbs-hero">
+    {{ with $hero }}
+      <img class="abacbs-hero-photo" src="{{ .RelPermalink }}" alt="" width="{{ .Width }}" height="{{ .Height }}">
+    {{ end }}
+    <div class="abacbs-hero-inner">
+      {{ partial "conference-breadcrumbs.html" . }}
+      <h1 class="abacbs-hero-title" aria-label="ABACBS {{ site.Params.currentConferenceYear }}">
+        <span class="abacbs-hero-prompt" aria-hidden="true"><svg viewBox="0 0 20 32" fill="none" focusable="false"><path d="M3 3 16 16 3 29" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="abacbs-hero-command"><span class="abacbs-hero-name">ABACBS</span><span class="abacbs-hero-year">
+          {{- range split (string site.Params.currentConferenceYear) "" -}}
+            {{- if eq . "5" -}}
+              <span class="abacbs-hero-year-five">{{ . }}</span>
+            {{- else -}}
+              {{ . }}
+            {{- end -}}
+          {{- end -}}
+        </span><span class="abacbs-hero-cursor" aria-hidden="true"></span></span>
+      </h1>
+      <p class="abacbs-hero-subtitle">Australian Bioinformatics and Computational Biology Society</p>
+    </div>
+  </section>
+
+{{ end }}

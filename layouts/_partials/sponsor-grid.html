@@ -1,0 +1,50 @@
+{{/*
+  Renders a grid of sponsor logos, each linking to the sponsor's site and
+  tagged with their tier badge. Sponsors display in the order listed in
+  front matter — list your highest tier first.
+
+  Call with: {{ partial "sponsor-grid.html" (dict "page" . "sponsors" .Params.sponsors) }}
+    page     - the current Page (needed to resolve bundled logo resources)
+    sponsors - the list from front matter (.Params.sponsors)
+*/}}
+{{ $page := .page }}
+{{ $sponsors := .sponsors }}
+{{ if $sponsors }}
+  <div class="abacbs-sponsor-grid">
+    {{ range $sponsors }}
+      {{ $logo := false }}
+      {{ if .logo }}
+        {{ $logo = $page.Resources.GetMatch .logo }}
+        {{ if not $logo }}
+          {{ warnf "[ABACBS] Logo %q not found for %q on %s — check the filename matches exactly." .logo .name $page.File.Path }}
+        {{ end }}
+      {{ end }}
+      {{ if .url }}
+        <a class="abacbs-sponsor-tile" href="{{ .url }}" target="_blank" rel="noopener noreferrer">
+          {{ if $logo }}
+            {{ partial "picture.html" (dict "img" $logo "alt" .name "class" "abacbs-sponsor-logo" "lazy" true "webp" true) }}
+          {{ else }}
+            {{/* No logo yet — show the sponsor name as text so the entry still appears */}}
+            <span class="abacbs-sponsor-name">{{ .name }}</span>
+          {{ end }}
+          {{ with .tier }}
+            <span class="abacbs-sponsor-tier">{{ . }}</span>
+          {{ end }}
+        </a>
+      {{ else }}
+        <div class="abacbs-sponsor-tile">
+          {{ if $logo }}
+            {{ partial "picture.html" (dict "img" $logo "alt" .name "class" "abacbs-sponsor-logo" "lazy" true "webp" true) }}
+          {{ else }}
+            <span class="abacbs-sponsor-name">{{ .name }}</span>
+          {{ end }}
+          {{ with .tier }}
+            <span class="abacbs-sponsor-tier">{{ . }}</span>
+          {{ end }}
+        </div>
+      {{ end }}
+    {{ end }}
+  </div>
+{{ else }}
+  <p class="abacbs-empty-note"><em>No sponsors have been added yet.</em></p>
+{{ end }}

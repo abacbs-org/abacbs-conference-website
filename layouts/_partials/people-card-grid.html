@@ -1,0 +1,101 @@
+{{/*
+  Renders a responsive grid of person cards (photo, name, role,
+  affiliation, optional bio, optional talk title, optional talk
+  abstract). Used by both the Speakers and Committee pages.
+
+  Call with: {{ partial "people-card-grid.html" (dict "page" . "people" .Params.people) }}
+    page   - the current Page (needed to resolve bundled photo resources)
+    people - the list from front matter (.Params.people)
+
+  Styling lives in assets/css/abacbs-mana.css under the
+  ".people-grid" / ".person-card" rules.
+*/}}
+{{ $page := .page }}
+{{ $people := .people }}
+{{ $popouts := .popouts | default false }}
+{{ if $people }}
+  <div class="people-grid{{ if $popouts }} people-grid--portrait{{ end }}">
+    {{ range $index, $person := $people }}
+      <div class="person-card">
+        {{ $photo := false }}
+        {{ if .photo }}
+          {{ $photo = $page.Resources.GetMatch .photo }}
+          {{ if not $photo }}
+            {{ warnf "[ABACBS] Photo %q not found for %q on %s — check the filename matches exactly." .photo .name $page.File.Path }}
+          {{ end }}
+        {{ end }}
+        {{ if $photo }}
+          {{ partial "picture.html" (dict "img" $photo "alt" .name "class" "person-card__photo" "lazy" true "webp" true) }}
+        {{ else }}
+          {{ $initials := substr (.name | default "?") 0 1 }}
+          {{ if $popouts }}
+            {{ $name := replaceRE "(?i)^(a/prof\\.?|prof\\.?|dr\\.?)\\s+" "" (.name | default "?") }}
+            {{ $words := split $name " " }}
+            {{ $initials = substr (index $words 0) 0 1 }}
+            {{ if gt (len $words) 1 }}
+              {{ $initials = printf "%s%s" $initials (substr (index $words (sub (len $words) 1)) 0 1) }}
+            {{ end }}
+          {{ end }}
+          <div class="person-card__photo-fallback">
+            {{ $initials | upper }}
+          </div>
+        {{ end }}
+        <div class="person-card__body">
+          <div class="person-card__name">{{ with .url }}<a href="{{ . }}" target="_blank" rel="noopener">{{ $person.name }}</a>{{ else }}{{ $person.name }}{{ end }}</div>
+          {{ if $popouts }}
+            <div class="person-card__meta">
+              {{ with .role }}<span class="person-card__role">{{ . }}</span>{{ end }}
+              {{ with .affiliation }}<span class="person-card__affiliation">{{ . }}</span>{{ end }}
+            </div>
+          {{ else }}
+            {{ with .role }}<div class="person-card__role">{{ . }}</div>{{ end }}
+            {{ with .affiliation }}<div class="person-card__affiliation">{{ . }}</div>{{ end }}
+          {{ end }}
+        {{ if $popouts }}
+          <div class="person-card__actions">
+            {{ if .bio }}
+              <button type="button" class="person-card__button" aria-haspopup="dialog" aria-controls="speaker-bio-{{ $index }}" onclick="document.getElementById('speaker-bio-{{ $index }}').showModal()">Biography</button>
+            {{ end }}
+            {{ if or .talkTitle .talkAbstract }}
+              <button type="button" class="person-card__button" aria-haspopup="dialog" aria-controls="speaker-talk-{{ $index }}" onclick="document.getElementById('speaker-talk-{{ $index }}').showModal()">Talk</button>
+            {{ end }}
+          </div>
+          {{ with .bio }}
+            <dialog id="speaker-bio-{{ $index }}" class="person-card__dialog" aria-labelledby="speaker-bio-title-{{ $index }}">
+              <form method="dialog"><button class="person-card__close" aria-label="Close biography">&times;</button></form>
+              <h2 id="speaker-bio-title-{{ $index }}">{{ $person.name }} — Biography</h2>
+              <div class="person-card__dialog-content">{{ . | markdownify }}</div>
+            </dialog>
+          {{ end }}
+          {{ if or .talkTitle .talkAbstract }}
+            <dialog id="speaker-talk-{{ $index }}" class="person-card__dialog" aria-labelledby="speaker-talk-title-{{ $index }}">
+              <form method="dialog"><button class="person-card__close" aria-label="Close talk">&times;</button></form>
+              <h2 id="speaker-talk-title-{{ $index }}">{{ $person.name }} — Talk</h2>
+              {{ with .talkTitle }}<h3>{{ . }}</h3>{{ end }}
+              {{ with .talkAbstract }}<div class="person-card__dialog-content">{{ . | markdownify }}</div>{{ end }}
+            </dialog>
+          {{ end }}
+        {{ else }}
+          {{ with .bio }}
+            <details class="person-card__details">
+              <summary>Read biography</summary>
+              <div>{{ . | markdownify }}</div>
+            </details>
+          {{ end }}
+          {{ with .talkTitle }}
+            <div class="person-card__talk-title">{{ . }}</div>
+          {{ end }}
+          {{ with .talkAbstract }}
+            <details class="person-card__details">
+              <summary>Read abstract</summary>
+              <div>{{ . | markdownify }}</div>
+            </details>
+          {{ end }}
+        {{ end }}
+        </div>
+      </div>
+    {{ end }}
+  </div>
+{{ else }}
+  <p><em>No entries have been added yet.</em></p>
+{{ end }}

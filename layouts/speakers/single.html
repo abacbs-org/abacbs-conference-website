@@ -1,0 +1,15 @@
+{{ define "main" }}
+  <section class="abacbs-structured-section abacbs-speakers-section">
+    <div class="abacbs-structured-container">
+      {{ partial "conference-breadcrumbs.html" . }}
+      <h1 class="single-page-title">{{ .Title | emojify }}</h1>
+      {{ partial "people-card-grid.html" (dict "page" . "people" .Params.people "popouts" true) }}
+      {{ $visibleContent := .Content | replaceRE "(?s)<!--.*?-->" "" | strings.TrimSpace }}
+      {{ with $visibleContent }}
+        <div class="single-page-content abacbs-structured-intro">
+          {{ . | safeHTML | emojify }}
+        </div>
+      {{ end }}
+    </div>
+  </section>
+{{ end }}

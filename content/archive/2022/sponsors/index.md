@@ -1,0 +1,31 @@
+---
+title: "Sponsors"
+type: "sponsors"
+sponsors:
+  - name: "CSL"
+    tier: "Gold Sponsor"
+    logo: "2022_gold_csl.png"
+    url: "https://www.csl.com/"
+  - name: "Illumina"
+    tier: "Silver Sponsor"
+    logo: "2022_silver_illumina.png"
+    url: "https://www.illumina.com"
+  - name: "Oxford Nanopore Technologies"
+    tier: "Bronze Sponsor"
+    logo: "2022_bronze_ont.png"
+    url: "https://nanoporetech.com"
+  - name: "South Australian Genomics Centre"
+    tier: "Hub Sponsor"
+    logo: "2022_hub_sagc.png"
+    url: "https://sagc.org.au/"
+  - name: "University of Melbourne"
+    tier: "Hub Sponsor"
+    logo: "university-of-melbourne.png"
+    url: "https://www.unimelb.edu.au/"
+  - name: "Oxford Nanopore Technologies"
+    tier: "Hub Sponsor"
+    logo: "2022_hub_ont.png"
+    url: "https://nanoporetech.com"
+---
+
+We acknowledge the generous contributions from vendors sponsoring this event.

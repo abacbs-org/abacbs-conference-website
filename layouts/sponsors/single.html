@@ -1,0 +1,15 @@
+{{ define "main" }}
+  <section class="abacbs-structured-section">
+    <div class="abacbs-structured-container">
+      {{ partial "conference-breadcrumbs.html" . }}
+      <h1 class="single-page-title">{{ .Title | emojify }}</h1>
+      {{ partial "sponsor-grid.html" (dict "page" . "sponsors" .Params.sponsors) }}
+      {{/* .Plain ignores editor-note comments, so a comment-only body draws no empty panel */}}
+      {{ with and (trim .Plain " \n\r\t") .Content }}
+        <div class="single-page-content abacbs-structured-intro">
+          {{ . | emojify }}
+        </div>
+      {{ end }}
+    </div>
+  </section>
+{{ end }}
