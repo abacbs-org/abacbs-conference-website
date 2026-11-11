@@ -13,6 +13,7 @@
       id="mobile-menu-toggle"
       class="mobile-menu-toggle"
       aria-label="{{ i18n "toggleMenu" }}"
+      aria-controls="mobile-menu"
       aria-expanded="false"
       type="button">
       <span class="hamburger-icon">
@@ -23,7 +24,27 @@
     </button>
 
     <div class="header-menu">
-      {{ partial "menu.html" . }}
+      {{ partial "menu.html" (dict "page" .) }}
     </div>
   </div>
 </nav>
+
+<div id="mobile-menu" class="mobile-menu" aria-hidden="true">
+  <div class="mobile-menu-overlay"></div>
+  <nav class="mobile-menu-nav" aria-label="Mobile navigation">
+    {{ partial "menu.html" (dict "page" . "mobile" true) }}
+  </nav>
+</div>
+
+<script>
+  (() => {
+    const toggle = document.getElementById("mobile-menu-toggle");
+    const header = toggle.closest(".sticky-header");
+    header.addEventListener("focusout", (event) => {
+      if (event.relatedTarget && !header.contains(event.relatedTarget) &&
+          toggle.getAttribute("aria-expanded") === "true") {
+        toggle.click();
+      }
+    });
+  })();
+</script>

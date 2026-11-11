@@ -952,68 +952,175 @@ body:has(.abacbs-hero) .conference-breadcrumbs--path [aria-current="page"] {
   }
 }
 
+.mobile-menu {
+  display: none;
+}
+
 @media (max-width: 768px) {
+  .sticky-header:has(.mobile-menu[aria-hidden="false"]) {
+    bottom: 0;
+    align-self: stretch;
+    z-index: 1001;
+    border-bottom: 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: none;
+  }
+
+  .sticky-header:has(.mobile-menu[aria-hidden="false"]) .header-nav {
+    border-bottom: 1px solid #274456;
+    background: #061b2b;
+  }
+
+  .sticky-header:has(.mobile-menu[aria-hidden="false"]) .reading-progress-bar {
+    display: none;
+  }
+
+  .header-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-inline: 0;
+  }
+
+  .header-nav {
+    flex-shrink: 0;
+    padding-inline: 1.5rem;
+  }
+
   .mobile-menu-toggle {
     order: 1;
     margin-left: auto;
     flex-shrink: 0;
+    width: 44px;
+    height: 44px;
   }
 
-  .mobile-menu-nav .nav-register {
-    margin: 0.5rem 0 0;
+  .mobile-menu-toggle:focus-visible {
+    outline-color: #5bc6f1;
   }
 
-  .header-menu .menu-list {
+  .header-menu {
     display: none;
   }
 
-  .mobile-menu-content {
-    background: #829cac;
-    border-right-color: rgba(255, 255, 255, 0.2);
+  .mobile-menu[aria-hidden="false"] {
+    display: block;
+    position: relative;
+    inset: auto;
+    flex: 1;
+    min-height: 0;
+    height: auto;
   }
 
-  .mobile-menu-footer {
-    display: none;
+  .mobile-menu .mobile-menu-overlay {
+    background: rgba(6, 27, 43, 0.32);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .mobile-menu-nav {
+    position: relative;
+    box-sizing: border-box;
+    max-height: 100%;
+    padding: 0.375rem 1.25rem 1rem;
+    overscroll-behavior: contain;
+    border-bottom: 1px solid #274456;
+    background: #061b2b;
+    color-scheme: dark;
   }
 
   .mobile-menu-nav .menu-list {
     display: block;
   }
 
-  .mobile-menu-nav .menu-item {
-    margin-bottom: 0.5rem;
+  .mobile-menu-nav .menu-item:not(:last-child) {
+    border-bottom: 1px solid #274456;
+  }
+
+  .mobile-menu-nav :is(.menu-link, .menu-group-toggle) {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.4rem 0.25rem;
+    border-radius: 0;
+    color: #f7fbfd;
+    font-size: 1rem;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .mobile-menu-nav :is(.menu-link, .menu-group-toggle):is(:hover, :focus) {
+    background: #173446;
+    color: #fff;
+  }
+
+  .mobile-menu-nav :is(.menu-link, .menu-group-toggle):focus-visible {
+    outline: 2px solid #5bc6f1;
+    outline-offset: -2px;
+  }
+
+  .mobile-menu-nav :is(.menu-link, .menu-group-toggle).active {
+    background: transparent;
+    color: #5bc6f1;
+    text-decoration: underline 2px;
+    text-underline-offset: 0.3rem;
   }
 
   .mobile-menu-nav .menu-group-toggle {
-    width: 100%;
-    text-align: left;
-    padding: 0.55rem 0;
-    color: #292d31;
-    pointer-events: none;
+    justify-content: space-between;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .mobile-menu-nav .menu-group-toggle::-webkit-details-marker {
+    display: none;
   }
 
   .mobile-menu-nav .menu-caret {
-    display: none;
+    display: block;
+    opacity: 1;
+  }
+
+  .mobile-menu-nav details[open] .menu-caret {
+    transform: translateY(0.1rem) rotate(225deg);
   }
 
   .mobile-menu-nav .submenu-list {
     position: static;
+    min-width: 0;
+    margin: 0 0 0.375rem 0.5rem;
+    padding: 0 0 0 0.5rem;
+    border: 0;
+    border-inline-start: 1px solid #274456;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     opacity: 1;
     visibility: visible;
     transform: none;
-    border: 0;
-    background: transparent;
-    min-width: 0;
-    padding: 0 0 0.5rem 0.9rem;
+    transition: none;
   }
 
-  .mobile-menu-nav .submenu-link,
-  .mobile-menu-nav .menu-link {
-    color: #292d31;
-    padding: 0.5rem 0;
-    text-transform: none;
-    letter-spacing: 0.02em;
+  .mobile-menu-nav .submenu-link {
+    color: #c1d5e1;
     font-size: 0.95rem;
+  }
+
+  .mobile-menu-nav .nav-register {
+    justify-content: center;
+    margin-top: 0.75rem;
+    border-radius: 5px;
+    background: #c91422;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .mobile-menu-nav .nav-register:is(:hover, :focus) {
+    background: #ae1320;
   }
 
   .abacbs-hero {

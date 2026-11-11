@@ -1,4 +1,6 @@
 <ul class="menu-list">
+  {{ $page := .page }}
+  {{ $mobile := .mobile }}
   {{ $currentYear := site.Params.currentConferenceYear | default "2099" }}
   {{ $base := printf "/%s" $currentYear }}
   {{ if not (site.GetPage $base) }}
@@ -18,7 +20,7 @@
     {{ range $entry := $entries }}
       {{ with site.GetPage (printf "%s/%s" $base (index $entry 0)) }}
         {{ $links = $links | append (dict "url" .RelPermalink "name" (index $entry 1)) }}
-        {{ if eq $.RelPermalink .RelPermalink }}{{ $activeYearGroup = $identifier }}{{ end }}
+        {{ if eq $page.RelPermalink .RelPermalink }}{{ $activeYearGroup = $identifier }}{{ end }}
       {{ end }}
     {{ end }}
     {{ $yearMenuLinks = merge $yearMenuLinks (dict $identifier $links) }}
@@ -38,26 +40,34 @@
         {{ $hasDynamicChildren = false }}
         {{ $url = (index $yearLinks 0).url }}
       {{ end }}
-      {{ $active := or ($.IsMenuCurrent "main" .) ($.HasMenuCurrent "main" .) (eq $.RelPermalink $url) }}
+      {{ $active := or ($page.IsMenuCurrent "main" .) ($page.HasMenuCurrent "main" .) (eq $page.RelPermalink $url) }}
       {{ if $isYearGroup }}
         {{ $active = eq $activeYearGroup $identifier }}
       {{ else if $isArchive }}
-        {{ $active = and (eq $.Section "archive") (not $activeYearGroup) }}
+        {{ $active = and (eq $page.Section "archive") (not $activeYearGroup) }}
       {{ end }}
       <li class="menu-item {{ if or .HasChildren $hasDynamicChildren }}menu-group{{ end }}">
         {{ if or .HasChildren $hasDynamicChildren }}
-          <button
-            type="button"
-            class="menu-link menu-group-toggle {{ if $active }}active{{ end }}"
-            aria-haspopup="true"
-            aria-expanded="false">
-            {{ .Name }}
-            <span class="menu-caret" aria-hidden="true"></span>
-          </button>
+          {{ if $mobile }}
+            <details name="mobile-menu-group">
+              <summary class="menu-group-toggle{{ if $active }} active{{ end }}">
+                {{ .Name }}
+                <span class="menu-caret" aria-hidden="true"></span>
+              </summary>
+          {{ else }}
+            <button
+              type="button"
+              class="menu-link menu-group-toggle {{ if $active }}active{{ end }}"
+              aria-haspopup="true"
+              aria-expanded="false">
+              {{ .Name }}
+              <span class="menu-caret" aria-hidden="true"></span>
+            </button>
+          {{ end }}
           <ul class="submenu-list" aria-label="{{ .Name }} submenu">
             {{ if $isYearGroup }}
               {{ range $yearLinks }}
-                <li class="submenu-item"><a href="{{ .url }}" class="menu-link submenu-link {{ if eq $.RelPermalink .url }}active{{ end }}"{{ if eq $.RelPermalink .url }} aria-current="page"{{ end }}>{{ .name }}</a></li>
+                <li class="submenu-item"><a href="{{ .url }}" class="menu-link submenu-link {{ if eq $page.RelPermalink .url }}active{{ end }}"{{ if eq $page.RelPermalink .url }} aria-current="page"{{ end }}>{{ .name }}</a></li>
               {{ end }}
             {{ else if $isArchive }}
               {{ $archivePages := where site.RegularPages "Section" "archive" }}
@@ -72,7 +82,7 @@
               {{ if gt (len $archiveYears) 0 }}
                 {{ range collections.Reverse $archiveYears }}
                   {{ $archiveURL := printf "archive/%s/" . | relLangURL }}
-                  <li class="submenu-item"><a href="{{ $archiveURL }}" class="menu-link submenu-link {{ if hasPrefix $.RelPermalink $archiveURL }}active{{ end }}"{{ if eq $.RelPermalink $archiveURL }} aria-current="page"{{ end }}>{{ . }}</a></li>
+                  <li class="submenu-item"><a href="{{ $archiveURL }}" class="menu-link submenu-link {{ if hasPrefix $page.RelPermalink $archiveURL }}active{{ end }}"{{ if eq $page.RelPermalink $archiveURL }} aria-current="page"{{ end }}>{{ . }}</a></li>
                 {{ end }}
               {{ else }}
                 <li class="submenu-item"><span class="menu-link submenu-link">No archives yet</span></li>
@@ -82,17 +92,18 @@
                 <li class="submenu-item">
                   <a
                     href="{{ .URL | relLangURL }}"
-                    class="menu-link submenu-link {{ if $.IsMenuCurrent "main" . }}active{{ end }}">
+                    class="menu-link submenu-link {{ if $page.IsMenuCurrent "main" . }}active{{ end }}">
                     {{ .Name }}
                   </a>
                 </li>
               {{ end }}
             {{ end }}
           </ul>
+          {{ if $mobile }}</details>{{ end }}
         {{ else }}
           <a
             href="{{ $url }}"
-            class="menu-link {{ if $active }}active{{ end }}"{{ if eq $.RelPermalink $url }} aria-current="page"{{ end }}>
+            class="menu-link {{ if $active }}active{{ end }}"{{ if eq $page.RelPermalink $url }} aria-current="page"{{ end }}>
             {{ .Name }}
           </a>
         {{ end }}
@@ -104,6 +115,6 @@
     {{ $registration = site.GetPage (printf "/archive/%s/registration" $currentYear) }}
   {{ end }}
   {{ with $registration }}
-    <li class="menu-item"><a class="nav-register" href="{{ .RelPermalink }}">Register</a></li>
+    <li class="menu-item"><a class="nav-register{{ if $mobile }} menu-link{{ end }}" href="{{ .RelPermalink }}">Register</a></li>
   {{ end }}
 </ul>
