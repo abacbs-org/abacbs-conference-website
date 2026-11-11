@@ -72,24 +72,25 @@ main {
 }
 
 .sticky-header {
+  --header-background: rgba(6, 27, 43, 0.68);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   width: 100%;
   border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(6, 27, 43, 0.68);
+  background: var(--header-background);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
 [data-theme="light"] .sticky-header {
-  background: rgba(6, 27, 43, 0.68);
+  background: var(--header-background);
 }
 
 /* Inner pages need the splash's navy backing behind the shared navigation. */
 body:not(:has(.abacbs-hero)) .sticky-header {
-  background: #061b2b;
+  --header-background: #061b2b;
 }
 
 .header-container {
@@ -957,10 +958,8 @@ body:has(.abacbs-hero) .conference-breadcrumbs--path [aria-current="page"] {
 }
 
 @media (max-width: 768px) {
-  .sticky-header:has(.mobile-menu[aria-hidden="false"]) {
-    bottom: 0;
-    align-self: stretch;
-    z-index: 1001;
+  .sticky-header,
+  [data-theme="light"] .sticky-header {
     border-bottom: 0;
     background: transparent;
     backdrop-filter: none;
@@ -968,9 +967,10 @@ body:has(.abacbs-hero) .conference-breadcrumbs--path [aria-current="page"] {
     transition: none;
   }
 
-  .sticky-header:has(.mobile-menu[aria-hidden="false"]) .header-nav {
-    border-bottom: 1px solid #274456;
-    background: #061b2b;
+  .sticky-header:has(.mobile-menu[aria-hidden="false"]) {
+    bottom: 0;
+    align-self: stretch;
+    z-index: 1001;
   }
 
   .sticky-header:has(.mobile-menu[aria-hidden="false"]) .reading-progress-bar {
@@ -987,6 +987,10 @@ body:has(.abacbs-hero) .conference-breadcrumbs--path [aria-current="page"] {
   .header-nav {
     flex-shrink: 0;
     padding-inline: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    background: var(--header-background);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .mobile-menu-toggle {
